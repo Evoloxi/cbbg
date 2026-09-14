@@ -67,7 +67,7 @@ public final class CbbgClient implements ClientModInitializer {
 
         // Register HUD element
         HudElementRegistry.addLast(Identifier.fromNamespaceAndPath(Cbbg.MOD_ID, "hud_overlay"),
-                (context, deltaTracker) -> {
+                (context, _) -> {
                     if (!isDemoMode()) {
                         return;
                     }

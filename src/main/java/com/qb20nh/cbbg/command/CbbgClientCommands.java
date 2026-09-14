@@ -39,7 +39,7 @@ public final class CbbgClientCommands {
 
     public static void register() {
         ClientCommandRegistrationCallback.EVENT
-                .register((dispatcher, registryAccess) -> registerCommands(dispatcher));
+                .register((dispatcher, _) -> registerCommands(dispatcher));
     }
 
     private static void registerCommands(CommandDispatcher<FabricClientCommandSource> dispatcher) {
@@ -62,7 +62,7 @@ public final class CbbgClientCommands {
         }).then(literal("set").executes(ctx -> {
             sendModeUsage(ctx.getSource());
             return 1;
-        }).then(argument(ARG_MODE, STRING_ARG).suggests((ctx, builder) -> {
+        }).then(argument(ARG_MODE, STRING_ARG).suggests((_, builder) -> {
             for (CbbgConfig.Mode mode : CbbgConfig.Mode.values()) {
                 builder.suggest(mode.getSerializedName());
             }
@@ -101,7 +101,7 @@ public final class CbbgClientCommands {
             ctx.getSource().sendFeedback(Component.translatable("cbbg.command.format.current",
                     pixelFormatName(format)));
             return 1;
-        }).then(literal("set").then(argument(ARG_FORMAT, STRING_ARG).suggests((ctx, builder) -> {
+        }).then(literal("set").then(argument(ARG_FORMAT, STRING_ARG).suggests((_, builder) -> {
             builder.suggest(CbbgConfig.PixelFormat.RGBA16F.getSerializedName());
             builder.suggest(CbbgConfig.PixelFormat.RGBA32F.getSerializedName());
             return builder.buildFuture();

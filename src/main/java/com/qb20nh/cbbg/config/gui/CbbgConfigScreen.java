@@ -21,7 +21,6 @@ import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import org.jspecify.annotations.Nullable;
 
 public final class CbbgConfigScreen extends Screen {
     private final Screen parent;
@@ -80,7 +79,7 @@ public final class CbbgConfigScreen extends Screen {
                 .addRenderableWidget(CycleButton.builder(this::getModeName, CbbgConfig.get().mode())
                         .withTooltip(this::getModeTooltip).withValues(CbbgConfig.Mode.values())
                         .create(cx - 100, yStart, 200, 20,
-                                Component.translatable("cbbg.config.mode"), (button, value) -> {
+                                Component.translatable("cbbg.config.mode"), (_, value) -> {
                                     // When cbbg disabled itself due to a render error, keep config
                                     // read-only.
                                     if (lockedByError) {
@@ -94,7 +93,7 @@ public final class CbbgConfigScreen extends Screen {
                 .builder(CbbgConfigScreen::getPixelFormatName, CbbgConfig.get().pixelFormat())
                 .withValues(CbbgConfig.PixelFormat.RGBA16F, CbbgConfig.PixelFormat.RGBA32F)
                 .create(cx - 100, yStart + 24, 200, 20,
-                        Component.translatable("cbbg.config.format"), (button, value) -> {
+                        Component.translatable("cbbg.config.format"), (_, value) -> {
                             if (lockedByError || lockedByUser) {
                                 return;
                             }
@@ -149,7 +148,7 @@ public final class CbbgConfigScreen extends Screen {
         seedEdit.setValue(Objects.requireNonNull(Long.toString(CbbgConfig.get().stbnSeed())));
         seedEdit.addFormatter(new EditBox.TextFormatter() {
             @Override
-            public @Nullable FormattedCharSequence format(@NonNull String text, int offset) {
+            public @NonNull FormattedCharSequence format(@NonNull String text, int offset) {
                 return FormattedCharSequence.forward(text.replace("-?\\d*", ""), Style.EMPTY);
             }//.setFilter(s -> s.matches("-?\\d*")); // Only integers // TODO
         });
@@ -171,7 +170,7 @@ public final class CbbgConfigScreen extends Screen {
 
         // 6. Generate Button
         Button generateButton = this.addRenderableWidget(
-                Button.builder(Component.translatable("cbbg.config.button.generate_stbn"), b -> {
+                Button.builder(Component.translatable("cbbg.config.button.generate_stbn"), _ -> {
                     if (lockedByError || lockedByUser) {
                         return;
                     }
@@ -218,7 +217,7 @@ public final class CbbgConfigScreen extends Screen {
         // 7. Notifications
         CycleButton<Boolean> chatNotifyButton = this.addRenderableWidget(
                 CycleButton.onOffBuilder(CbbgConfig.get().notifyChat()).create(cx - 100, y, 98, 20,
-                        Component.translatable("cbbg.config.notify.chat"), (b, val) -> {
+                        Component.translatable("cbbg.config.notify.chat"), (_, val) -> {
                             if (lockedByError || lockedByUser) {
                                 return;
                             }
@@ -227,7 +226,7 @@ public final class CbbgConfigScreen extends Screen {
 
         CycleButton<Boolean> toastNotifyButton = this.addRenderableWidget(
                 CycleButton.onOffBuilder(CbbgConfig.get().notifyToast()).create(cx + 2, y, 98, 20,
-                        Component.translatable("cbbg.config.notify.toast"), (b, val) -> {
+                        Component.translatable("cbbg.config.notify.toast"), (_, val) -> {
                             if (lockedByError || lockedByUser) {
                                 return;
                             }
@@ -238,7 +237,7 @@ public final class CbbgConfigScreen extends Screen {
 
         // 8. Done Button
         this.addRenderableWidget(Button
-                .builder(Component.translatable("cbbg.config.button.done"), b -> this.onClose())
+                .builder(Component.translatable("cbbg.config.button.done"), _ -> this.onClose())
                 .bounds(cx - 100, y, 200, 20).build());
 
         // UI lock:
