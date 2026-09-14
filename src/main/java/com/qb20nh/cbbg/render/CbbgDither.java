@@ -184,7 +184,7 @@ public final class CbbgDither {
             }
 
             CommandEncoder encoder = RenderSystem.getDevice().createCommandEncoder();
-            GpuBuffer ditherInfo = ensureDitherInfoUbo(encoder);
+            GpuBuffer ditherInfo = ensureDitherInfoUbo();
             uploadStbnFrame(encoder);
 
             try (RenderPass pass = encoder.createRenderPass(() -> passLabel, ditherView,
@@ -394,7 +394,7 @@ public final class CbbgDither {
         return shaderManager.getShader(fragmentShader, ShaderType.FRAGMENT) != null;
     }
 
-    private static @NonNull GpuBuffer ensureDitherInfoUbo(CommandEncoder encoder) {
+    private static @NonNull GpuBuffer ensureDitherInfoUbo() {
         if (ditherInfoUbo == null) {
             ditherInfoUbo = new MappableRingBuffer(() -> "cbbg / DitherInfo",
                     GpuBuffer.USAGE_UNIFORM | GpuBuffer.USAGE_MAP_WRITE, DITHER_INFO_UBO_SIZE);
