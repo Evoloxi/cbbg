@@ -1,9 +1,9 @@
 package com.qb20nh.cbbg.render.stbn;
 
+import com.mojang.blaze3d.GpuFormat;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.textures.GpuTexture;
 import com.mojang.blaze3d.textures.GpuTextureView;
-import com.mojang.blaze3d.textures.TextureFormat;
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -52,7 +52,7 @@ public class StbnTextureManager {
         GpuTexture created =
                 (@NonNull GpuTexture) RenderSystem.getDevice().createTexture(() -> "cbbg / STBN",
                         GpuTexture.USAGE_COPY_DST | GpuTexture.USAGE_TEXTURE_BINDING,
-                        TextureFormat.RGBA8, width, height, 1, 1);
+                        GpuFormat.RGBA8_UNORM, width, height, 1, 1);
         texture = created;
         view = RenderSystem.getDevice().createTextureView(created);
 

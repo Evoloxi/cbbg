@@ -1,7 +1,7 @@
 package com.qb20nh.cbbg.mixin;
 
+import com.mojang.blaze3d.GpuFormat;
 import com.mojang.blaze3d.opengl.GlConst;
-import com.mojang.blaze3d.textures.TextureFormat;
 import com.qb20nh.cbbg.CbbgClient;
 import com.qb20nh.cbbg.config.CbbgConfig;
 import com.qb20nh.cbbg.render.GlFormatOverride;
@@ -21,8 +21,7 @@ public abstract class GlConstMixin {
     private static final int GL_RGBA32F = GL30.GL_RGBA32F;
 
     @Inject(method = "toGlInternalId", at = @At("HEAD"), cancellable = true)
-    private static void cbbg$toGlInternalId(TextureFormat textureFormat,
-            CallbackInfoReturnable<Integer> cir) {
+    private static void cbbg$toGlInternalId(GpuFormat gpuFormat, CallbackInfoReturnable<Integer> cir) {
         // 1. Explicit override (takes precedence)
         Integer forced = GlFormatOverride.getForcedFormat();
         if (forced != null) {
@@ -35,9 +34,8 @@ public abstract class GlConstMixin {
             return;
         }
 
-        if (textureFormat == TextureFormat.RGBA8) {
-            CbbgConfig.PixelFormat fmt =
-                    MainTargetFormatSupport.getEffective(CbbgConfig.get().pixelFormat());
+        if (gpuFormat == GpuFormat.RGBA8_UNORM) {
+            CbbgConfig.PixelFormat fmt = MainTargetFormatSupport.getEffective(CbbgConfig.get().pixelFormat());
             switch (fmt) {
                 case RGBA16F -> cir.setReturnValue(GL_RGBA16F);
                 case RGBA32F -> cir.setReturnValue(GL_RGBA32F);

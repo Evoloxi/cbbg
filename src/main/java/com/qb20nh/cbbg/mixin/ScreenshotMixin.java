@@ -34,7 +34,7 @@ public abstract class ScreenshotMixin {
             return;
         }
 
-        if (target != Minecraft.getInstance().getMainRenderTarget()) {
+        if (target != Minecraft.getInstance().gameRenderer.mainRenderTarget()) {
             return;
         }
 
