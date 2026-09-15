@@ -33,6 +33,5 @@
 		"minecraft": "~${minecraft_version}",
 		"java": ">=21",
 		"fabric-api": "*"
-	},
-	"accessWidener": "cbbg.classtweaker"
+	}
 }

@@ -127,11 +127,7 @@ jar {
 
 
 }
-loom {
 
-	accessWidenerPath = file("src/main/resources/cbbg.classtweaker")
-
-}
 tasks.named("sourcesJar") {
 	archiveVersion = artifactVersion
 }

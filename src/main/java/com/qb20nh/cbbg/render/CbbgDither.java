@@ -5,7 +5,6 @@ import com.mojang.blaze3d.PrimitiveTopology;
 import com.mojang.blaze3d.buffers.GpuBuffer;
 import com.mojang.blaze3d.buffers.GpuBufferSlice;
 import com.mojang.blaze3d.buffers.Std140Builder;
-import com.mojang.blaze3d.opengl.GlCommandEncoder;
 import com.mojang.blaze3d.pipeline.*;
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.shaders.ShaderType;
@@ -236,7 +235,7 @@ public final class CbbgDither {
             if (outView == null) {
                 return false;
             }
-            ((GlCommandEncoder) RenderSystem.getDevice().createCommandEncoder().backend()).presentTexture(outView, outView.getWidth(0), outView.getHeight(0));
+            Minecraft.getInstance().windowSurface().blitFromTexture(RenderSystem.getDevice().createCommandEncoder(), outView);
             return true;
         } catch (Exception e) {
             disableWithLog(e);
@@ -261,7 +260,7 @@ public final class CbbgDither {
             if (outView == null) {
                 return false;
             }
-            ((GlCommandEncoder) RenderSystem.getDevice().createCommandEncoder().backend()).presentTexture(outView, outView.getWidth(0), outView.getHeight(0));
+            Minecraft.getInstance().windowSurface().blitFromTexture(RenderSystem.getDevice().createCommandEncoder(), outView);
             return true;
         } catch (Exception e) {
             disableWithLog(e);
