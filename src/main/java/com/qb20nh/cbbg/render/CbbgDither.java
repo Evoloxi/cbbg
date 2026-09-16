@@ -68,7 +68,7 @@ public final class CbbgDither {
                             BindGroupLayout.builder().withSampler(S_IN).withSampler(S_NOISE).withUniform(U_DITHER_INFO, UniformType.UNIFORM_BUFFER).build()
                     )
                     .withDepthStencilState(Optional.empty()) // new DepthStencilState(CompareOp.ALWAYS_PASS, false)
-                    .withColorTargetState(new ColorTargetState(Optional.empty(), GpuFormat.RGBA16_FLOAT, 15))
+                    .withColorTargetState(new ColorTargetState(Optional.empty(), GpuFormat.RGBA8_UNORM, 15))
                     .withVertexBinding(0, VertexFormat.builder(0).build())
                     .withPrimitiveTopology(PrimitiveTopology.TRIANGLES)
                     .build();
@@ -80,7 +80,7 @@ public final class CbbgDither {
                             BindGroupLayout.builder().withSampler(S_IN).withSampler(S_NOISE).withUniform(U_DITHER_INFO, UniformType.UNIFORM_BUFFER).build()
                     )
                     .withDepthStencilState(Optional.empty())
-                    .withColorTargetState(new ColorTargetState(Optional.empty(), GpuFormat.RGBA16_FLOAT, 15))
+                    .withColorTargetState(new ColorTargetState(Optional.empty(), GpuFormat.RGBA8_UNORM, 15))
                     .withVertexBinding(0, VertexFormat.builder(0).build())
                     .withPrimitiveTopology(PrimitiveTopology.TRIANGLES)
                     .build();
@@ -271,7 +271,7 @@ public final class CbbgDither {
     private static void ensureGpuTargets(int width, int height) {
         if (ditherTarget == null || ditherTarget.width != width || ditherTarget.height != height) {
             if (ditherTarget == null) {
-                ditherTarget = new TextureTarget("cbbg / Dither Output", width, height, false, GpuFormat.RGBA16_FLOAT); //TODO
+                ditherTarget = new TextureTarget("cbbg / Dither Output", width, height, false, GpuFormat.RGBA8_UNORM);
             } else {
                 ditherTarget.resize(width, height);
             }
