@@ -7,6 +7,14 @@
 	"authors": [
 		"qb20nh"
 	],
+	"contributors": [
+		{
+			"name": "Evoloxi",
+			"contact": {
+				"homepage": "https://github.com/Evoloxi"
+			}
+		}
+	],
 	"contact": {
 		"homepage": "https://modrinth.com/mod/cbbg",
 		"issues": "https://github.com/qb20nh/cbbg/issues"
