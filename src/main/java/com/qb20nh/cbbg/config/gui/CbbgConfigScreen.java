@@ -6,8 +6,6 @@ import java.util.function.DoubleConsumer;
 import java.util.function.IntConsumer;
 
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.network.chat.Style;
-import net.minecraft.util.FormattedCharSequence;
 import org.jspecify.annotations.NonNull;
 import com.qb20nh.cbbg.compat.iris.IrisCompat;
 import com.qb20nh.cbbg.config.CbbgConfig;
@@ -146,23 +144,6 @@ public final class CbbgConfigScreen extends Screen {
         seedEdit = new EditBox(this.font, cx - 100 + 40, y, 160, 20,
                 Component.translatable("cbbg.config.seed.label"));
         seedEdit.setValue(Objects.requireNonNull(Long.toString(CbbgConfig.get().stbnSeed())));
-        seedEdit.addFormatter(new EditBox.TextFormatter() {
-            @Override
-            public @NonNull FormattedCharSequence format(@NonNull String text, int offset) {
-                return FormattedCharSequence.forward(text.replace("-?\\d*", ""), Style.EMPTY);
-            }//.setFilter(s -> s.matches("-?\\d*")); // Only integers // TODO
-        });
-        seedEdit.setResponder(s -> {
-            if (lockedByError || lockedByUser) {
-                return;
-            }
-            try {
-                long seed = (s == null || s.isEmpty()) ? 0 : Long.parseLong(s);
-                CbbgConfig.setStbnSeed(seed);
-            } catch (NumberFormatException ignored) {
-                // Do nothing
-            }
-        });
         seedEdit.setTooltip(TOOLTIP_STBN_SEED);
         this.addRenderableWidget(seedEdit);
 
@@ -176,7 +157,12 @@ public final class CbbgConfigScreen extends Screen {
                     }
                     int stbnSize = CbbgConfig.get().stbnSize();
                     int stbnDepth = CbbgConfig.get().stbnDepth();
-                    long stbnSeed = CbbgConfig.get().stbnSeed();
+                    long stbnSeed;
+                    try {
+                        stbnSeed = parseSeed(seedEdit.getValue());
+                    } catch (NumberFormatException invalidSeed) {
+                        return;
+                    }
 
                     ConfirmScreen confirm = new ConfirmScreen(confirmed -> {
                         if (confirmed) {
@@ -211,6 +197,20 @@ public final class CbbgConfigScreen extends Screen {
                     };
                     this.minecraft.setScreenAndShow(confirm);
                 }).bounds(cx - 100, y, 200, 20).tooltip(TOOLTIP_GENERATE_STBN).build());
+
+        seedEdit.setResponder(s -> {
+            if (lockedByError || lockedByUser) {
+                return;
+            }
+            try {
+                CbbgConfig.setStbnSeed(parseSeed(s));
+                seedEdit.setTextColor(0xFFE0E0E0);
+                generateButton.active = true;
+            } catch (NumberFormatException invalidSeed) {
+                seedEdit.setTextColor(0xFFFF5555);
+                generateButton.active = false;
+            }
+        });
 
         y += 28;
 
@@ -266,6 +266,13 @@ public final class CbbgConfigScreen extends Screen {
             chatNotifyButton.active = false;
             toastNotifyButton.active = false;
         }
+    }
+
+    static long parseSeed(String text) {
+        if (!text.matches("-?[0-9]*")) {
+            throw new NumberFormatException("Seed must be an integer");
+        }
+        return text.isEmpty() ? 0 : Long.parseLong(text);
     }
 
     private Component getModeName(CbbgConfig.Mode mode) {

@@ -30,6 +30,10 @@ repositories {
 	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
 	// for more information about repositories.
 	maven { url = "https://maven.florianmichael.de/releases" }
+	maven {
+		url = "https://api.modrinth.com/maven"
+		content { includeGroup "maven.modrinth" }
+	}
     maven {
         name = "Terraformers"
         url = "https://maven.terraformersmc.com/"
@@ -61,6 +65,14 @@ fabricApi {
 		enableGameTests = false
 		enableClientGameTests = true
 		eula = true
+	}
+}
+
+// Opt-in integration dependencies, excluded from the published mod.
+if (providers.gradleProperty("testRenderScale").isPresent()) {
+	dependencies {
+		gametestRuntimeOnly "maven.modrinth:renderscale:EJ7KZw6k"
+		gametestRuntimeOnly "maven.modrinth:cloth-config:Nv3xnWXd"
 	}
 }
 
@@ -116,10 +128,7 @@ java {
 jar {
 	inputs.property "archivesName", project.base.archivesName
 
-	// Unobfuscated (Mojang-named) jar for the *_unobfuscated runtime.
-	// The default Fabric distribution jar is produced by `remapJar`.
 	archiveVersion = artifactVersion
-	archiveClassifier = "unobf"
 
 	from("LICENSE") {
 		rename { "${it}_${inputs.properties.archivesName}"}
